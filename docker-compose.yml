@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  db-scheduler:
+    image: db-scheduler-sample:0.0.1-SNAPSHOT
+    ports:
+      - 53211-53212:8080
+      #- 53209-53213:8080
+    environment:
+      - JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n"
+      - CARRIER_SCANS_SERVICE_URL=mockserver:1080
+      - EXPIRATION_DATE_SERVICE_URL=mockserver:1080
+    volumes:
+      - D:\db-scheduler-data:/mnt/share
+    env_file:
+      - ./docker-compose.env
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - rencredit-net
+networks:
+  rencredit-net:
+    driver: bridge
+    name: rencredit-net
